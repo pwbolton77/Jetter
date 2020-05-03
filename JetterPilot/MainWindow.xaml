@@ -1,0 +1,17 @@
+﻿<Window x:Class="JetterPilot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2006" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:local="clr-namespace:JetterPilot"
+        Title="Jetter Pilot" Height="1000" Width="1200" Closing="Window_Closing" Loaded="Window_Loaded" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp"
+    WindowStartupLocation="CenterScreen"
+    MinHeight="1000" MinWidth="1200"
+    ResizeMode="NoResize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" >
+    <Window.Background>
+        <SolidColorBrush Color="{DynamicResource UIMainWindowBackground}"/>
+    </Window.Background>
+    <Grid>
+        <local:SignInControl x:Name="SignInControl" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+        <ContentControl Name="placeholder" />
+    </Grid>
+</Window>

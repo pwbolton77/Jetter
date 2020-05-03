@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/JetterCommServiceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/JetterCommServiceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="PilotCommand">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="command" type="tns:PilotCommandType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PilotCommand" nillable="true" type="tns:PilotCommand" />
+  <xs:simpleType name="PilotCommandType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RudderNeutral" />
+      <xs:enumeration value="RudderRight" />
+      <xs:enumeration value="RudderLeft" />
+      <xs:enumeration value="ThrustNeutral" />
+      <xs:enumeration value="ThrustUp" />
+      <xs:enumeration value="ThrustDown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PilotCommandType" nillable="true" type="tns:PilotCommandType" />
+  <xs:complexType name="ArrayOfCommPointInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CommPointInfo" nillable="true" type="tns:CommPointInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCommPointInfo" nillable="true" type="tns:ArrayOfCommPointInfo" />
+  <xs:complexType name="CommPointInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CommPointInfo" nillable="true" type="tns:CommPointInfo" />
+</xs:schema>

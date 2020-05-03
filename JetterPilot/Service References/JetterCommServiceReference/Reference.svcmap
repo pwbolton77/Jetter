@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d91d5e7f-2702-4003-8b7c-2a4d76c6638d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://ironman:7733/Design_Time_Addresses/JetterCommServiceLibrary/Service1/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="9fbba366-b68c-4bf6-b064-a3d570bc6b86" SourceId="1" SourceUrl="net.tcp://ironman:7733/Design_Time_Addresses/JetterCommServiceLibrary/Service1/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="dc5bad8e-6096-4357-a4cf-8e2651b3a91e" SourceId="1" SourceUrl="net.tcp://ironman:7733/Design_Time_Addresses/JetterCommServiceLibrary/Service1/mex" />
+    <MetadataFile FileName="service21.xsd" MetadataType="Schema" ID="8889781a-c539-4288-8e1f-3be91afbb6b1" SourceId="1" SourceUrl="net.tcp://ironman:7733/Design_Time_Addresses/JetterCommServiceLibrary/Service1/mex" />
+    <MetadataFile FileName="JetterCommServiceLibrary1.xsd" MetadataType="Schema" ID="41df446d-8515-4f00-aa7c-6ef252ac3789" SourceId="1" SourceUrl="net.tcp://ironman:7733/Design_Time_Addresses/JetterCommServiceLibrary/Service1/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

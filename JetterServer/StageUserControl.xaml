@@ -1,0 +1,105 @@
+﻿<!-- StageUserControl is the main screen for the the game. It is placed inside the MainWindow.  It hast two main
+    parts: A status board on the left, and the game stage canvas on the right.  -->
+<UserControl x:Class="JetterServer.StageUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="611" d:DesignWidth="721" Name="GameStageUserControl" >
+    <!--Note: The UserControl had to be named (i.e. the "Name" attribute had to be added on the line above) 
+    for the DependentProperty content binding to work. -->
+    <UserControl.Resources>
+        <!--Create a DataTemplate to show floating point with no decimal, right justified for some of the status board values. -->
+        <DataTemplate x:Key="NumericF0RightJustifiedTemplate">
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
+                <!--F0 is floating point format with no decimal.-->
+                <TextBlock Text="{Binding StringFormat=F0}" Width="20" />
+            </StackPanel>
+        </DataTemplate>
+
+    </UserControl.Resources>
+    <!--MainGrid setup.-->
+    <Grid Name="MainGrid" ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <!--The MainGrid has two columns and one row. Left column is for the status board. Right column is for game stage canvas. -->
+            <ColumnDefinition Width="Auto" />
+            <!--Auto cause the column widith to change based on contents.-->
+            <ColumnDefinition Width="*" />
+            <!--The * is like Auto for the last column and smart enought to either auto size or take up what room is left.-->
+        </Grid.ColumnDefinitions>
+
+        <!--StatusBoardGrid setup.-->
+        <Grid Name="StatusBoardGrid" ShowGridLines="True">
+            <!--For now the StatusBoardGrid has just one row and one col.-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+
+            <!--Label/Value pair setup.-->
+            <!--This StackPanel is in row 0, col 0 of the StatusBoardGrid and is used to show some
+            labels on the left, and values on the right. -->
+            <StackPanel Name="StatusValueContainerStackPanel">
+                <!--Use a bunch of StackPanel elements to layout each lable/value pair.-->
+                <!--Values are either using "content binding" or the code is manualy updating the values.  If "content binding" is used there is a
+                "Content = {Binding .." statement on the value and there is an associated DependentProperty in the code that is automatically 
+                updating the display when the property is changed.-->
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Turn Number:" Height="28" />
+                    <Label Height="28" Name="turnNumberValueLabel" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Message:"  Height="28" />
+                    <Label Height="28" Name="serverMessageValueLabel" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Time:"  Height="28" />
+                    <Label Height="28" Name="ellapsedTimeValueLabel" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Frame Count:" Height="28" />
+                    <Label Height="28" Name="frameCounterValueLabel" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Frames per sec:" Height="28" />
+                    <Label Height="28" Name="frameRateValueLabel" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Score:" Height="28" />
+                    <!--The value below is using content binding to a DependentProperty (in code).  The ElementName refers to the
+                    UserControl "Name" noted at the top of this file.  The Path is the name of the property setup in the code behind.-->
+                    <Label Height="28" Name="scoreValueLabel" Content="{Binding ElementName=GameStageUserControl, Path=Score}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Player is colliding:" Height="28" />
+                    <Label Height="28" Name="playerIsCollidingValueLabel" Content="{Binding ElementName=GameStageUserControl, Path=IsPlayerColliding}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Collision count:" Height="28" />
+                    <Label Height="28" Name="collisionCountValueLabel" Content="{Binding ElementName=GameStageUserControl, Path=PlayerCollisionTurnCount}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Player Heading:" Height="28" />
+                    <!--The value below uses a ContentTemplate to format the number as floating point, no decimal point, right justified. 
+                    The DynamicResource template is defined near the top of this file.-->
+                    <Label Height="28" Name="playerShipHeadingValueLabel"  Content="{Binding ElementName=GameStageUserControl, Path=PlayerShipHeading}" 
+                           ContentTemplate="{DynamicResource NumericF0RightJustifiedTemplate}" HorizontalContentAlignment="Right" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!--GameStageCanvas setup.-->
+        <!--The second column of the MainGrid is a canvas surrounded by a Boarder.-->
+        <!--<Border Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="5" CornerRadius="4">-->
+        <Border Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="0.5" CornerRadius="0">
+            <Canvas Name="GameStageCanvas" Height="600" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" ClipToBounds="True" Background="LightGray"></Canvas>
+        </Border>
+
+    </Grid>
+</UserControl>

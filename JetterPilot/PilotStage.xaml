@@ -1,0 +1,298 @@
+﻿<UserControl x:Class="JetterPilot.PilotStage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="1200" Name="PilotStageUI" Loaded="PilotStageUI_Loaded" PreviewKeyDown="PilotStageUI_PreviewKeyDown" PreviewKeyUp="PilotStageUI_PreviewKeyUp">
+    <!--Note: The UserControl had to be named (i.e. the "Name" attribute had to be added on the line above) 
+    for the DependentProperty content binding to work. -->
+    <UserControl.Resources>
+        <!--Create a DataTemplate to show floating point with no decimal, right justified for some of the status board values. -->
+        <DataTemplate x:Key="NumericF0RightJustifiedTemplate">
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
+                <!--F0 is floating point format with no decimal.-->
+                <TextBlock Text="{Binding StringFormat=F0}" Width="20" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid x:Name="MainGrid" ShowGridLines="False">
+            <Grid.ColumnDefinitions>
+                <!--The MainGrid has two columns and one row. Left column is for the status board. Right column is for game stage canvas. -->
+                <ColumnDefinition Width="Auto" />
+                <!--Auto cause the column widith to change based on contents.-->
+                <ColumnDefinition Width="*" />
+                <!--The * is like Auto for the last column and smart enought to either auto size or take up what room is left.-->
+            </Grid.ColumnDefinitions>
+
+
+            <!--StatusBoardGrid setup.-->
+            <Grid x:Name="StatusBoardGrid" ShowGridLines="False">
+                <!--For now the StatusBoardGrid has just one row and one col.-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="840" />
+                </Grid.RowDefinitions>
+
+
+                <!--Label/Value pair setup.-->
+                <!--This StackPanel is in row 0, col 0 of the StatusBoardGrid and is used to show some
+                    labels on the left, and values on the right. -->
+                <StackPanel x:Name="StatusValueContainerStackPanel" Width="200">
+                    <!--Use a bunch of StackPanel elements to layout each lable/value pair.-->
+                    <!--Values are either using "content binding" or the code is manualy updating the values.  If "content binding" is used there is a
+                "Content = {Binding .." statement on the value and there is an associated DependentProperty in the code that is automatically 
+                updating the display when the property is changed.-->
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Heading:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <!--The value below uses a ContentTemplate to format the number as floating point, no decimal point, right justified. 
+                            The DynamicResource template is defined near the top of this file.-->
+                        <Label Name="PilotHeadingValueLabel"  Content="{Binding ElementName=PilotStageUI, Path=PilotHeading}" 
+                           ContentTemplate="{DynamicResource NumericF0RightJustifiedTemplate}" HorizontalContentAlignment="Right" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Turn Number:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <Label x:Name="turnNumberValueLabel" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Time:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <Label x:Name="ellapsedTimeValueLabel" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Frame Count:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <Label x:Name="frameCounterValueLabel" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Frames per sec:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <Label x:Name="frameRateValueLabel" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Score:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <!--The value below is using content binding to a DependentProperty (in code).  The ElementName refers to the
+                    UserControl "Name" noted at the top of this file.  The Path is the name of the property setup in the code behind.-->
+                        <Label x:Name="scoreValueLabel" Content="{Binding Score, ElementName=PilotStageUI}" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Bogey Heading:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <!--The value below uses a ContentTemplate to format the number as floating point, no decimal point, right justified. 
+                            The DynamicResource template is defined near the top of this file.-->
+                        <Label Name="bogeyHeadingValueLabel"  Content="{Binding ElementName=PilotStageUI, Path=BogeyHeading}" 
+                           ContentTemplate="{DynamicResource NumericF0RightJustifiedTemplate}" HorizontalContentAlignment="Right" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Intercept Heading:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <!--The value below uses a ContentTemplate to format the number as floating point, no decimal point, right justified. 
+                            The DynamicResource template is defined near the top of this file.-->
+                        <Label Name="bogeyInterceptHeadingValueLabel"  Content="{Binding ElementName=PilotStageUI, Path=BogeyInterceptHeading}" 
+                           ContentTemplate="{DynamicResource NumericF0RightJustifiedTemplate}" HorizontalContentAlignment="Right" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Range:" Style="{DynamicResource PilotStatusLableTemplate}" />
+                        <!--The value below uses a ContentTemplate to format the number as floating point, no decimal point, right justified. 
+                            The DynamicResource template is defined near the top of this file.-->
+                        <Label Name="bogeyRangeValueLabel"  Content="{Binding ElementName=PilotStageUI, Path=BogeyRange}" 
+                           ContentTemplate="{DynamicResource NumericF0RightJustifiedTemplate}" HorizontalContentAlignment="Right" Style="{DynamicResource PilotStatusLableTemplate}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+            <Canvas x:Name="RadarOutsideFrameContainer" Grid.Column="1" Margin="0,0,261,150">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.00" ScaleY="1.00"/>
+                        <SkewTransform/>
+                        <RotateTransform CenterX="10" CenterY="10"/>
+                        <TranslateTransform X="0" Y="0"/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+                <!--<Border Name="RadarOutsideFrame" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="10" CornerRadius="4">-->
+                <Border x:Name="RadarOutsideFrame" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,0,0,0" Margin="0,0,0,0"  ClipToBounds="True">
+                    <!--Important: The RadarContain below MUST have Width and Height attributes set so we in the code
+                        behind we don't get NaN when we try to figure out the radar height/width. -->
+                    <Canvas x:Name="RadarContainer" Width="828" Height="828">
+                        <!--<Canvas.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="{DynamicResource UIBackgroundDark}" Offset="0.0"/>
+                            <GradientStop Color="{DynamicResource UIBackgroundGradientStop2}" Offset="10.337"/>
+                        </LinearGradientBrush>
+                        </Canvas.Background>-->
+                        <Canvas x:Name="RadarSweepContainer" Canvas.Top="2" Canvas.Left="2" ClipToBounds="False">
+                            <Ellipse x:Name="RadarSweepBackingEllipse" Height="820" Canvas.Left="0" Canvas.Top="0" Width="820">
+                                    <Ellipse.Effect>
+                                    <BlurEffect Radius="04"></BlurEffect>
+                                    </Ellipse.Effect>
+                                <Ellipse.Fill>
+                                    <!--<SolidColorBrush Color="{DynamicResource UIRadarSweepBacking}"/>-->
+                                    <!--<SolidColorBrush Color="Black"/>-->
+                                    <ImageBrush ImageSource="{StaticResource MapBackground}" Viewbox="0.0,0.0 1.0,1.0">
+                                        <ImageBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform X="{Binding ElementName=PilotStageUI, Path=MapImgTransX}" 
+                                                                    Y="{Binding ElementName=PilotStageUI, Path=MapImgTransY}"/>
+                                                <RotateTransform Angle="{Binding ElementName=PilotStageUI, Path=NorthMarkerAngle}" CenterX="0.5" CenterY="0.5"/>
+                                                <ScaleTransform ScaleX="{Binding ElementName=PilotStageUI, Path=MapScale}" 
+                                                                ScaleY="{Binding ElementName=PilotStageUI, Path=MapScale}"
+                                                                CenterX="0.5" CenterY="0.5"/>
+                                            </TransformGroup>
+                                        </ImageBrush.RelativeTransform>
+                                    </ImageBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <!--Canvas where we dynamically insert radar targets-->
+                            <Canvas Name="RadarTargetInsertionCanvas" Canvas.Left="-3.5" Canvas.Top="-3.5"> </Canvas>
+                            <Rectangle x:Name="RadarMask" Height="832" Canvas.Top="-6" Canvas.Left="-6" Width="832" Margin="0,0,0,0">
+                                <Rectangle.Fill>
+                                    <!--<SolidColorBrush Color="#EF000013"/>-->
+                                    <RadialGradientBrush GradientOrigin="0.5,0.5">
+                                        <!--<GradientStop Color="Yellow" Offset="0.0" />
+                                        <GradientStop Color="Orange" Offset="0.5" />
+                                        <GradientStop Color="Red" Offset="1.0" />-->
+
+                                        <GradientStop Color="#00000000" Offset="0.0" />
+                                        <GradientStop Color="#00000000" Offset="0.870" />
+                                        <GradientStop Color="{DynamicResource UIMainWindowBackground}" Offset="0.98"/>
+                                        <GradientStop Color="{DynamicResource UIMainWindowBackground}" Offset="1.0"/>
+                                        <!--<GradientStop Color="Red" Offset="0.99" />
+                                        <GradientStop Color="Red" Offset="1.0" />-->
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Ellipse x:Name="RadarSweepEdgeEllipse" Height="820" Canvas.Left="0" Canvas.Top="0" Width="820">
+                                <Ellipse.StrokeThickness>
+                                    <System:Double>05</System:Double>
+                                </Ellipse.StrokeThickness>
+                                <Ellipse.Stroke>
+                                    <SolidColorBrush Color="{DynamicResource UIAccentBrightStop1}"/>
+                                </Ellipse.Stroke>
+                            </Ellipse>
+
+                            <!--NorthMarkerCanvas Begin -->
+                            <Canvas Name="NorthMarkerCanvas" Height="820" Width="820" ClipToBounds="False">
+                                <Canvas.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                                        <SkewTransform/>
+                                        <!--Rotate the north marker by changing the angle below-->
+                                        <!--<RotateTransform CenterX="0" CenterY="0" Angle="17"/>-->
+                                        <RotateTransform CenterX="0" CenterY="0" Angle="{Binding ElementName=PilotStageUI, Path=NorthMarkerAngle}"/>
+                                        <TranslateTransform X="410" Y="410"/>
+                                    </TransformGroup>
+                                </Canvas.RenderTransform>
+
+                                <Canvas Name="centerInCanvas" Height="820" Width="820" ClipToBounds="False">
+                                    <Canvas.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                                            <SkewTransform/>
+                                            <RotateTransform CenterX="0" CenterY="0" />
+                                            <TranslateTransform X="-410" Y="-410"/>
+                                        </TransformGroup>
+                                    </Canvas.RenderTransform>
+
+                                    <!--<Ellipse Name="TempNorthMarkerFrame" Width="820" Height="820" Visibility="Visible" StrokeThickness="0.5" Canvas.Left="0" Canvas.Top="0"  Stroke="Red"/>-->
+                                    <Canvas Canvas.Left="410" Canvas.Top="0">
+                                        <Canvas Height="5" Width="5">
+                                            <Canvas.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform CenterX="0" CenterY="0" Angle="45"/>
+                                                    <!--Push the north marker toward the center by adding to Y below.-->
+                                                    <TranslateTransform X="0" Y="1"/>
+                                                </TransformGroup>
+                                            </Canvas.RenderTransform>
+                                            <!--<Rectangle Name="TempNorthMarker" Fill="Orange" Height="6" Width="6"></Rectangle>-->
+                                            <Rectangle Name="TempNorthMarker" Height="6" Width="6">
+                                                <Rectangle.Fill>
+                                                    <SolidColorBrush Color="{DynamicResource UIAccentBrightStop2}"/>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Canvas>
+                                    </Canvas>
+
+                                </Canvas>
+                            </Canvas>
+                            <!--NorthMarkerCanvas END -->
+
+                            <!--PilotVisMarkerCanvas END -->
+                            <Canvas Name="PillotVisibilityMarkerCanvas" Height="820" Width="820" ClipToBounds="False">
+                                <Canvas.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                                        <SkewTransform/>
+                                        <!--Rotate the north marker by changing the angle below-->
+                                        <!--<RotateTransform CenterX="0" CenterY="0" Angle="17"/>-->
+                                        <RotateTransform CenterX="0" CenterY="0" Angle="{Binding ElementName=PilotStageUI, Path=NorthMarkerAngle}"/>
+                                        <TranslateTransform X="410" Y="410"/>
+                                    </TransformGroup>
+                                </Canvas.RenderTransform>
+
+                                <Canvas Canvas.Left="0" Canvas.Top="0">
+                                    <Canvas >
+                                        <Canvas.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                                                <SkewTransform/>
+                                                <RotateTransform CenterX="0" CenterY="0" Angle="0"/>
+                                                <TranslateTransform X="0" Y="0"/>
+                                            </TransformGroup>
+                                        </Canvas.RenderTransform>
+                                        <!-- Pilot visibility marker -->
+                                        <Ellipse Name="PilotVisMarkerEllipse" 
+                                                     Width= "{Binding ElementName=PilotStageUI, Path=PilotVisMarkerWidth}"
+                                                     Height= "{Binding ElementName=PilotStageUI, Path=PilotVisMarkerHeight}"
+                                                     Canvas.Left= "{Binding ElementName=PilotStageUI, Path=PilotVisMarkerLeft}"
+                                                     Canvas.Top= "{Binding ElementName=PilotStageUI, Path=PilotVisMarkerTop}"
+                                                     Visibility="Visible" Opacity="0.3">
+                                            <Ellipse.Stroke>
+                                                <SolidColorBrush Color="{DynamicResource UIAccentBrightStop2}"/>
+                                            </Ellipse.Stroke>
+                                        </Ellipse>
+                                    </Canvas>
+                                </Canvas>
+
+                            </Canvas>
+                            <!--PilotVisMarkerCanvas END -->
+
+                            <Ellipse x:Name="RadarCenterEllipse" Height="6" Canvas.Left="407" Canvas.Top="407" Width="6">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush Color="{DynamicResource UIAccentBrightStop1}"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Canvas>
+                    </Canvas>
+                </Border>
+            </Canvas>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Border x:Name="MessageBoxBorder" Margin="0,0" VerticalAlignment="Bottom" Height="115" CornerRadius="0,0,0,0">
+                <Border.Background>
+                    <SolidColorBrush Color="{DynamicResource UIAccentBrightStop1}"/>
+                </Border.Background>
+                <!--<TextBox Margin="5,5,5,5" x:Name="commMessagesTextBox" Width="Auto" Height="Auto" BorderBrush="{x:Null}" FontFamily="Agency FB" FontSize="15" Text="" TextWrapping="Wrap" IsEnabled="True" Cursor="IBeam"  ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" />-->
+                <TextBox Margin="0,0,0,0" x:Name="commMessagesTextBox" Width="Auto" Height="Auto" BorderBrush="{x:Null}" 
+					Style="{DynamicResource PilotMessageTemplate}" Text="" TextWrapping="Wrap" IsEnabled="True" Cursor="IBeam"  
+					ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+					IsReadOnly="True" />
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>
